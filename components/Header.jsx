@@ -149,7 +149,7 @@ export default function HeaderLayout() {
             <animated.div
               className={styles.item}
               style={{ ...style, background: item.css, height: "100%" }}
-              onClick={() => router?.push(item.route)}
+              onClick={() => item.route && router.push(item.route)}
             />
           ))}
         </animated.div>

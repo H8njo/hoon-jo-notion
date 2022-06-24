@@ -1,7 +1,10 @@
-import styled from "styled-components";
-import { useState } from "react";
-import styles from "./Header.module.css";
-import { useRouter } from "next/router";
+import { useState, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import styled from 'styled-components';
+// import { LazyLoadImage } from 'react-lazy-load-image-component';
+// import 'react-lazy-load-image-component/src/effects/blur.css';
+
+import styles from './Header.module.css';
 
 import {
   useTransition,
@@ -10,108 +13,30 @@ import {
   config,
   animated,
   useSpringRef,
-} from "@react-spring/web";
+} from '@react-spring/web';
 
-export default function HeaderLayout() {
+export default function HeaderLayout({ menu = [] }) {
   const [open, set] = useState(false);
   const router = useRouter();
+  const data = useMemo(
+    () =>
+      menu.map((item) => ({
+        route: `/blog/${item.title}`,
+        height: 200,
+        css: `linear-gradient(135deg, ${item.menuBackground[0]} 0%, ${item.menuBackground[1]} 100%)`,
+        ...item,
+      })),
+    [menu]
+  );
 
-  const data = [
-    {
-      name: "Rare Wind",
-      description: "#a8edea → #fed6e3",
-      css: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
-      route: "/",
-      height: 200,
-    },
-    {
-      name: "Saint Petersburg",
-      description: "#f5f7fa → #c3cfe2",
-      css: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
-      route: "/test",
-      height: 400,
-    },
-    {
-      name: "Deep Blue",
-      description: "#e0c3fc → #8ec5fc",
-      css: "linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)",
-      height: 400,
-    },
-    {
-      name: "Ripe Malinka",
-      description: "#f093fb → #f5576c",
-      css: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      height: 400,
-    },
-    {
-      name: "Perfect White",
-      description: "#fdfbfb → #ebedee",
-      css: "linear-gradient(135deg, #E3FDF5 0%, #FFE6FA 100%)",
-      height: 400,
-    },
-    {
-      name: "Near Moon",
-      description: "#5ee7df → #b490ca",
-      css: "linear-gradient(135deg, #5ee7df 0%, #b490ca 100%)",
-      height: 400,
-    },
-    {
-      name: "Wild Apple",
-      description: "#d299c2 → #fef9d7",
-      css: "linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)",
-      height: 200,
-    },
-    {
-      name: "Ladoga Bottom",
-      description: "#ebc0fd → #d9ded8",
-      css: "linear-gradient(135deg, #ebc0fd 0%, #d9ded8 100%)",
-      height: 400,
-    },
-    {
-      name: "Sunny Morning",
-      description: "#f6d365 → #fda085",
-      css: "linear-gradient(135deg, #f6d365 0%, #fda085 100%)",
-      height: 200,
-    },
-    {
-      name: "Lemon Gate",
-      description: "#96fbc4 → #f9f586",
-      css: "linear-gradient(135deg, #96fbc4 0%, #f9f586 100%)",
-      height: 400,
-    },
-    {
-      name: "Salt Mountain",
-      description: " #FFFEFF → #D7FFFE",
-      css: "linear-gradient(135deg, #FFFEFF 0%, #D7FFFE 100%)",
-      height: 200,
-    },
-    {
-      name: "New York",
-      description: " #fff1eb → #ace0f9",
-      css: "linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%)",
-      height: 400,
-    },
-    {
-      name: "Soft Grass",
-      description: " #c1dfc4 → #deecdd",
-      css: "linear-gradient(135deg, #c1dfc4 0%, #deecdd 100%)",
-      height: 400,
-    },
-    {
-      name: "Japan Blush",
-      description: " #ddd6f3 → #faaca8",
-      css: "linear-gradient(135deg, #ddd6f3 0%, #faaca8 100%, #faaca8 100%)",
-      height: 200,
-    },
-  ];
   const springApi = useSpringRef();
   const { size, ...rest } = useSpring({
     ref: springApi,
     config: config.stiff,
-    from: { size: "0%", background: "black" },
+    from: { size: '0%', background: 'black' },
     to: {
-      size: open ? "100%" : "0%",
-      background: open ? "#ffffff0f" : "black",
+      size: open ? '100%' : '0%',
+      background: open ? '#ffffff0f' : 'black',
     },
   });
 
@@ -124,18 +49,35 @@ export default function HeaderLayout() {
     leave: { opacity: 0, scale: 0 },
   });
 
+  const closeBtnStyle = useSpring({
+    opacity: open ? 1 : 0,
+    delay: open ? 600 : 0,
+  });
+  const openBtnStyle = useSpring({
+    opacity: open ? 0 : 1,
+    delay: open ? 0 : 900,
+  });
+
   // This will orchestrate the two animations above, comment the last arg and it creates a sequence
   useChain(open ? [springApi, transApi] : [transApi, springApi], [
     0,
     open ? 0.1 : 0.6,
   ]);
 
+  const handleClickItem = (route) => {
+    router.push(route);
+    set((open) => !open);
+  };
+
   return (
     <>
-      <div
-        className={styles.wrapper}
-        style={{ height: "100vh", position: "fixed" }}
-      >
+      <div className={styles.wrapper}>
+        <animated.div style={{ ...closeBtnStyle, zIndex: 1 }}>
+          <BtnContainer visible={open}>
+            <CloseButton onClick={() => set(!open)}></CloseButton>
+          </BtnContainer>
+        </animated.div>
+
         <animated.div
           style={{
             ...rest,
@@ -143,17 +85,92 @@ export default function HeaderLayout() {
             height: size,
           }}
           className={styles.container}
-          onClick={() => set((open) => !open)}
         >
-          {transition((style, item) => (
-            <animated.div
-              className={styles.item}
-              style={{ ...style, background: item.css, height: "100%" }}
-              onClick={() => item.route && router.push(item.route)}
-            />
-          ))}
+          <animated.div style={{ ...openBtnStyle, position: 'absolute' }}>
+            <span
+              onClick={() => !open && set((open) => !open)}
+              style={{ color: 'red' }}
+            >
+              Icon
+            </span>
+          </animated.div>
+
+          {transition((style, item) => {
+            return (
+              <animated.div
+                className={styles.item}
+                style={{ ...style, background: item.css }}
+                onClick={() => handleClickItem(item.route)}
+              >
+                <Item>
+                  {/* {item.cover && (
+                    <LazyLoadImage
+                      placeholderSrc={styles.image}
+                      className={styles.image}
+                      alt={item.title}
+                      effect="blur"
+                      sizes="100px"
+                      src={item.cover}
+                      width="100%"
+                      height="100%"
+                    ></LazyLoadImage>
+                  )} */}
+                  <Title>{item.title}</Title>
+                  {/* <Description>{item.description}</Description> */}
+                </Item>
+              </animated.div>
+            );
+          })}
         </animated.div>
       </div>
     </>
   );
 }
+
+const Title = styled.h1`
+  text-align: center;
+  font-size: 24px;
+  color: #4b4b4b;
+`;
+const Description = styled.p`
+  color: white;
+  margin: 0;
+`;
+
+const Item = styled.div`
+  height: 100%;
+  opacity: 10;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  .lazy-load-image-background {
+    position: absolute;
+    top: 0;
+    z-index: -1;
+    left: 0;
+    opacity: 0.5;
+  }
+`;
+
+const BtnContainer = styled.div`
+  position: absolute;
+  display: flex;
+  width: 100%;
+  transition: all 0.5s ease-out;
+  top: ${({ visible }) => (visible ? '5px' : '-50px')};
+  justify-content: center;
+`;
+
+const CloseButton = styled.div`
+  height: 100px;
+  width: 100px;
+  height: 40px;
+  width: 41px;
+  zindex: 1;
+  background: blue;
+`;

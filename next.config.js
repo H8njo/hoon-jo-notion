@@ -1,9 +1,42 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  images: {
-    domains: ['s3.us-west-2.amazonaws.com'],
-  },
-};
+const fs = require('fs');
+const path = require('path');
+const withLess = require('next-with-less');
+const lessToJS = require('less-vars-to-js');
+const { redirect } = require('next/dist/server/api-utils');
 
-module.exports = nextConfig;
+const themeVariables = lessToJS(
+  fs.readFileSync(path.resolve(__dirname, './styles/variables.less'), 'utf8')
+);
+
+module.exports = withLess({
+  lessLoaderOptions: {
+    lessOptions: {
+      javascriptEnabled: true,
+      modifyVars: themeVariables, // make your antd custom effective
+      localIdentName: '[path]___[local]___[hash:base64:5]',
+    },
+  },
+  webpack5: true,
+  webpack: (config) => {
+    config.resolve.fallback = {
+      fs: false,
+      crypto: false,
+      path: false,
+      util: false,
+      events: false,
+      querystring: false,
+    };
+
+    return config;
+  },
+});
+
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//   reactStrictMode: true,
+//   images: {
+//     domains: ['s3.us-west-2.amazonaws.com'],
+//   },
+// };
+
+// module.exports = nextConfig;

@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import useSWR from 'swr';
 // import { LazyLoadImage } from 'react-lazy-load-image-component';
 // import 'react-lazy-load-image-component/src/effects/blur.css';
 
@@ -15,17 +16,18 @@ import {
   useSpringRef,
 } from '@react-spring/web';
 
-export default function HeaderLayout({ menu = [] }) {
+export default function HeaderLayout() {
+  const { data: menu, error } = useSWR('/api/menu');
   const [open, set] = useState(false);
   const router = useRouter();
   const data = useMemo(
     () =>
-      menu.map((item) => ({
+      menu?.map((item) => ({
         route: `/blog/${item.title}`,
         height: 200,
         css: `linear-gradient(135deg, ${item.menuBackground[0]} 0%, ${item.menuBackground[1]} 100%)`,
         ...item,
-      })),
+      })) || [],
     [menu]
   );
 

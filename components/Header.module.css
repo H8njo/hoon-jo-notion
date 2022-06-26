@@ -18,11 +18,10 @@
   grid-template-columns: repeat(4, minmax(100px, 1fr));
   grid-template-rows: 220px;
   grid-gap: 25px;
-  padding: 25px;
+  padding: 30px 15px 15px 15px;
   backdrop-filter: blur(8px);
   border-radius: 5px;
-  box-shadow: 2px 4px 4px 5px #d5d5d5;
-  /* box-shadow: 0px 10px 10px -5px rgba(0, 0, 0, 0.05); */
+  /* box-shadow: 2px 4px 4px 5px #d5d5d5; */
   will-change: width, height;
 }
 

@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import useSWR from 'swr';
+import * as Icon from '@ant-design/icons';
 // import { LazyLoadImage } from 'react-lazy-load-image-component';
 // import 'react-lazy-load-image-component/src/effects/blur.css';
 
@@ -35,10 +36,13 @@ export default function HeaderLayout() {
   const { size, ...rest } = useSpring({
     ref: springApi,
     config: config.stiff,
-    from: { size: '0%', background: 'black' },
+    from: { size: '0%', border: 'none' },
     to: {
       size: open ? '100%' : '0%',
-      background: open ? '#ffffff0f' : 'black',
+      background: open ? '#ffffff0f' : '#fff',
+      border: 1,
+      borderColor: '#ccc',
+      borderStyle: open ? 'solid' : 'none',
     },
   });
 
@@ -75,8 +79,14 @@ export default function HeaderLayout() {
     <>
       <div className={styles.wrapper}>
         <animated.div style={{ ...closeBtnStyle, zIndex: 1 }}>
-          <BtnContainer visible={open}>
-            <CloseButton onClick={() => set(!open)}></CloseButton>
+          <BtnContainer visible={open} style={{ paddingRight: 30 }}>
+            <CloseButton>
+              <Icon.CloseCircleTwoTone
+                twoToneColor="red"
+                style={{ fontSize: 35 }}
+                onClick={() => set(!open)}
+              />
+            </CloseButton>
           </BtnContainer>
         </animated.div>
 
@@ -89,12 +99,16 @@ export default function HeaderLayout() {
           className={styles.container}
         >
           <animated.div style={{ ...openBtnStyle, position: 'absolute' }}>
-            <span
+            <Icon.MenuOutlined
+              onClick={() => !open && set((open) => !open)}
+              style={{ fontSize: 30, display: open && 'none' }}
+            />
+            {/* <span
               onClick={() => !open && set((open) => !open)}
               style={{ color: 'red' }}
             >
               Icon
-            </span>
+            </span> */}
           </animated.div>
 
           {transition((style, item) => {
@@ -174,5 +188,4 @@ const CloseButton = styled.div`
   height: 40px;
   width: 41px;
   zindex: 1;
-  background: blue;
 `;

@@ -3,11 +3,6 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import * as Icon from '@ant-design/icons';
-// import { LazyLoadImage } from 'react-lazy-load-image-component';
-// import 'react-lazy-load-image-component/src/effects/blur.css';
-
-import styles from './Header.module.css';
-
 import {
   useTransition,
   useSpring,
@@ -16,15 +11,19 @@ import {
   animated,
   useSpringRef,
 } from '@react-spring/web';
+// import { LazyLoadImage } from 'react-lazy-load-image-component';
+// import 'react-lazy-load-image-component/src/effects/blur.css';
+
+import styles from './Header.module.css';
 
 export default function HeaderLayout() {
-  const { data: menu, error } = useSWR('/api/menu');
+  const { data: menu } = useSWR('/api/menu');
   const [open, set] = useState(false);
   const router = useRouter();
   const data = useMemo(
     () =>
       menu?.map((item) => ({
-        route: `/blog/${item.title}`,
+        route: `/blog/${item.id}`,
         height: 200,
         css: `linear-gradient(135deg, ${item.menuBackground[0]} 0%, ${item.menuBackground[1]} 100%)`,
         ...item,
@@ -36,11 +35,20 @@ export default function HeaderLayout() {
   const { size, ...rest } = useSpring({
     ref: springApi,
     config: config.stiff,
-    from: { size: '0%', border: 'none' },
+    from: {
+      size: '0%',
+      border: 'none',
+      background: '#ffffff00',
+      padding: 0,
+      overflow: 'visible',
+    },
     to: {
       size: open ? '100%' : '0%',
-      background: open ? '#ffffff0f' : '#fff',
+      background: open ? '#ffffff0f' : '#ffffff00',
       border: 1,
+      padding: open ? 15 : 0,
+      paddingTop: open ? 30 : 0,
+      overflow: open ? 'scroll' : 'visible',
       borderColor: '#ccc',
       borderStyle: open ? 'solid' : 'none',
     },
@@ -98,7 +106,9 @@ export default function HeaderLayout() {
           }}
           className={styles.container}
         >
-          <animated.div style={{ ...openBtnStyle, position: 'absolute' }}>
+          <animated.div
+            style={{ ...openBtnStyle, position: 'absolute', right: 0 }}
+          >
             <Icon.MenuOutlined
               onClick={() => !open && set((open) => !open)}
               style={{ fontSize: 30, display: open && 'none' }}
@@ -183,9 +193,7 @@ const BtnContainer = styled.div`
 `;
 
 const CloseButton = styled.div`
-  height: 100px;
-  width: 100px;
   height: 40px;
   width: 41px;
-  zindex: 1;
+  z-index: 1;
 `;

@@ -2,7 +2,6 @@ import notion from '@/lib/notion';
 
 export default async function (req, res) {
   const data = await notion.getMenu();
-  console.log(data);
   const response = data.results.map((page) => ({
     id: page.id,
     created_at: page.created_time,

@@ -37,20 +37,22 @@ export default function HeaderLayout() {
     config: config.stiff,
     from: {
       size: '0%',
-      border: 'none',
+      // border: 'none',
+      height: '1px',
       background: '#ffffff00',
       padding: 0,
       overflow: 'visible',
     },
     to: {
       size: open ? '100%' : '0%',
-      background: open ? '#ffffff0f' : '#ffffff00',
-      border: 1,
+      background: open ? '#b7c8fa73' : '#ffffff00',
+      height: '100%',
+      // border: 1,
       padding: open ? 15 : 0,
       paddingTop: open ? 30 : 0,
       overflow: open ? 'scroll' : 'visible',
-      borderColor: '#ccc',
-      borderStyle: open ? 'solid' : 'none',
+      // borderColor: '#ccc',
+      // borderStyle: open ? 'solid' : 'none',
     },
   });
 
@@ -89,9 +91,8 @@ export default function HeaderLayout() {
         <animated.div style={{ ...closeBtnStyle, zIndex: 1 }}>
           <BtnContainer visible={open} style={{ paddingRight: 30 }}>
             <CloseButton>
-              <Icon.CloseCircleTwoTone
-                twoToneColor="red"
-                style={{ fontSize: 35 }}
+              <Icon.CloseCircleFilled
+                style={{ fontSize: 30, color: '#ff6e6e' }}
                 onClick={() => set(!open)}
               />
             </CloseButton>

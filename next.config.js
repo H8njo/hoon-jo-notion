@@ -8,35 +8,30 @@ const themeVariables = lessToJS(
   fs.readFileSync(path.resolve(__dirname, './styles/variables.less'), 'utf8')
 );
 
-module.exports = withLess({
-  lessLoaderOptions: {
-    lessOptions: {
-      javascriptEnabled: true,
-      modifyVars: themeVariables, // make your antd custom effective
-      localIdentName: '[path]___[local]___[hash:base64:5]',
+module.exports = {
+  ...withLess({
+    lessLoaderOptions: {
+      lessOptions: {
+        javascriptEnabled: true,
+        modifyVars: themeVariables, // make your antd custom effective
+        localIdentName: '[path]___[local]___[hash:base64:5]',
+      },
     },
+    webpack5: true,
+    webpack: (config) => {
+      config.resolve.fallback = {
+        fs: false,
+        crypto: false,
+        path: false,
+        util: false,
+        events: false,
+        querystring: false,
+      };
+
+      return config;
+    },
+  }),
+  images: {
+    domains: ['live.staticflickr.com', 's3.us-west-2.amazonaws.com'],
   },
-  webpack5: true,
-  webpack: (config) => {
-    config.resolve.fallback = {
-      fs: false,
-      crypto: false,
-      path: false,
-      util: false,
-      events: false,
-      querystring: false,
-    };
-
-    return config;
-  },
-});
-
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   reactStrictMode: true,
-//   images: {
-//     domains: ['s3.us-west-2.amazonaws.com'],
-//   },
-// };
-
-// module.exports = nextConfig;
+};

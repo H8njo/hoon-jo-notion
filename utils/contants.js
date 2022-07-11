@@ -1,0 +1,16 @@
+export const gradients = [
+  { start: '#a8edea', end: '#fed6e3' },
+  { start: '#f5f7fa', end: '#c3cfe2' },
+  { start: '#e0c3fc', end: '#8ec5fc' },
+  { start: '#f093fb', end: '#f5576c' },
+  { start: '#fdfbfb', end: '#ebedee' },
+  { start: '#5ee7df', end: '#b490ca' },
+  { start: '#d299c2', end: '#fef9d7' },
+  { start: '#ebc0fd', end: '#d9ded8' },
+  { start: '#f6d365', end: '#fda085' },
+  { start: '#96fbc4', end: '#f9f586' },
+  { start: '#FFFEFF', end: '#D7FFFE' },
+  { start: '#fff1eb', end: '#ace0f9' },
+  { start: '#c1dfc4', end: '#deecdd' },
+  { start: '#ddd6f3', end: '#faaca8' },
+];

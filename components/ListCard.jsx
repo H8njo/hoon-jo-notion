@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Row, Col, Typography, Divider, Button, Space } from 'antd';
+import { Row, Col, Typography, Divider, Space } from 'antd';
 import Image from 'next/image';
 import * as Icon from '@ant-design/icons';
 import styled from 'styled-components';
-import {
-  Transition,
-  CSSTransition,
-  SwitchTransition,
-  TransitionGroup,
-} from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
+import ScrollAnimation from 'react-animate-on-scroll';
 
 import { gradients } from '@/utils/contants';
 
@@ -35,125 +31,139 @@ const ListCard = ({ data }) => {
     const isOpen = inProp[idx]?.isIn;
     return (
       <>
-        <Card
-          isEven={isEven(idx)}
-          wrap={false}
-          onClick={() => {
-            handleClick(idx);
-          }}
+        <ScrollAnimation
+          animateIn={isEven(idx) ? 'fadeInRight' : 'fadeInLeft'}
+          offset={40}
+          duration={0.3}
+          animateOnce={true}
         >
-          <ImageWrapper
-            span={7}
-            offset={isEven(idx) && 6}
-            order={isEven(idx) ? 1 : 2}
-            style={{
-              margin: isOpen && 0,
+          <Card
+            isEven={isEven(idx)}
+            wrap={false}
+            onClick={() => {
+              handleClick(idx);
             }}
           >
-            <Image
-              src="https://live.staticflickr.com/3716/11704689944_6ccf5eeabd_b.jpg"
-              layout="fill"
-              objectFit="cover"
-            />
-          </ImageWrapper>
-          <ContentWrapper span={11} order={isEven(idx) ? 2 : 1}>
-            <div style={{ textAlign: isEven(idx) ? 'left' : 'right' }}>
-              <Title level={2} ellipsis={true}>
-                The standard Lorem Ipsum
-              </Title>
-              <Paragraph
-                ellipsis={{ rows: 3 }}
-                style={{ fontSize: 20, color: '#686868' }}
-              >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </Paragraph>
-              <Row justify="space-between" align="middle">
-                <Col order={isEven(idx) ? 1 : 3}></Col>
-                <Col order={2}>
-                  <Space>
-                    <Image
-                      src="https://live.staticflickr.com/3716/11704689944_6ccf5eeabd_b.jpg"
-                      objectFit="cover"
-                      style={{ borderRadius: 50 }}
-                      width={40}
-                      height={40}
-                    />
-                    <Paragraph style={{ fontSize: 16 }}>Hoonjo</Paragraph>
-                  </Space>
-                </Col>
-              </Row>
-            </div>
-          </ContentWrapper>
-          <HoverWrapper
-            span={6}
-            style={{
-              background: `linear-gradient(135deg, ${gradients[idx]?.start} 0%, ${gradients[idx]?.end} 100%)`,
-              flex: `0 0 ${isOpen ? '25%' : '0'}`,
-            }}
-            order={isEven(idx) ? 3 : 0}
-          >
-            <CSSTransition
-              in={isOpen}
-              timeout={700}
-              classNames="example"
-              unmountOnExit
+            <ImageWrapper
+              span={7}
+              offset={isEven(idx) && 6}
+              order={isEven(idx) ? 1 : 2}
+              style={{
+                margin: isOpen && 0,
+              }}
             >
-              <div style={{ position: 'absolute', padding: 20 }}>
-                <ListItem>
-                  <ListTitle>
-                    <Icon.FileOutlined
-                      style={{ fontSize: 16, marginRight: 8 }}
-                    />
-                    homepsdfsdfsdfsdfage
-                  </ListTitle>
-                  <ListDescription>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  </ListDescription>
-                </ListItem>
-                <ListItem>
-                  <ListTitle>
-                    <Icon.UnorderedListOutlined
-                      style={{ fontSize: 16, marginRight: 8 }}
-                    />
-                    homepsdfsdfsdfsdfage
-                  </ListTitle>
-                  <ListDescription>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  </ListDescription>
-                </ListItem>
-                <ListItem>
-                  <ListTitle>
-                    <Icon.FileOutlined
-                      style={{ fontSize: 16, marginRight: 8 }}
-                    />
-                    homepsdfsdfsdfsdfage
-                  </ListTitle>
-                  <ListDescription>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  </ListDescription>
-                </ListItem>
-                <ListItem>
-                  <ListTitle>
-                    <Icon.UnorderedListOutlined
-                      style={{ fontSize: 16, marginRight: 8 }}
-                    />
-                    homepsdfsdfsdfsdfage
-                  </ListTitle>
-                  <ListDescription>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  </ListDescription>
-                </ListItem>
+              <Image
+                src="https://live.staticflickr.com/3716/11704689944_6ccf5eeabd_b.jpg"
+                layout="fill"
+                objectFit="cover"
+              />
+            </ImageWrapper>
+            <ContentWrapper span={11} order={isEven(idx) ? 2 : 1}>
+              <div style={{ textAlign: isEven(idx) ? 'left' : 'right' }}>
+                <Title level={2} ellipsis={true}>
+                  The standard Lorem Ipsum
+                </Title>
+                <Paragraph
+                  ellipsis={{ rows: 3 }}
+                  style={{ fontSize: 20, color: '#686868' }}
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                  irure dolor in reprehenderit in voluptate velit esse cillum
+                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                  cupidatat non proident, sunt in culpa qui officia deserunt
+                  mollit anim id est laborum.
+                </Paragraph>
+                <Row justify="space-between" align="middle">
+                  <Col order={isEven(idx) ? 1 : 3}></Col>
+                  <Col order={2}>
+                    <Space>
+                      <Image
+                        src="https://live.staticflickr.com/3716/11704689944_6ccf5eeabd_b.jpg"
+                        objectFit="cover"
+                        style={{ borderRadius: 50 }}
+                        width={40}
+                        height={40}
+                      />
+                      <Paragraph style={{ fontSize: 16 }}>Hoonjo</Paragraph>
+                    </Space>
+                  </Col>
+                </Row>
               </div>
-            </CSSTransition>
-          </HoverWrapper>
-        </Card>
-
+            </ContentWrapper>
+            <HoverWrapper
+              span={6}
+              style={{
+                background: `linear-gradient(135deg, ${gradients[idx]?.start} 0%, ${gradients[idx]?.end} 100%)`,
+                flex: `0 0 ${isOpen ? '25%' : '0'}`,
+              }}
+              order={isEven(idx) ? 3 : 0}
+            >
+              <CSSTransition
+                in={isOpen}
+                timeout={700}
+                classNames="example"
+                unmountOnExit
+              >
+                <div style={{ position: 'absolute', padding: 20 }}>
+                  <ListItem>
+                    <ListTitle>
+                      <Icon.FileOutlined
+                        style={{ fontSize: 16, marginRight: 8 }}
+                      />
+                      homepsdfsdfsdfsdfage
+                    </ListTitle>
+                    <ListDescription>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sedLorem ipsum dolor sit amet, consectetur adipiscing
+                      elit, sedLorem ipsum dolor sit amet, consectetur
+                      adipiscing elit, sedLorem ipsum dolor sit amet,
+                      consectetur adipiscing elit, sed
+                    </ListDescription>
+                  </ListItem>
+                  <ListItem>
+                    <ListTitle>
+                      <Icon.UnorderedListOutlined
+                        style={{ fontSize: 16, marginRight: 8 }}
+                      />
+                      homepsdfsdfsdfsdfage
+                    </ListTitle>
+                    <ListDescription>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed
+                    </ListDescription>
+                  </ListItem>
+                  <ListItem>
+                    <ListTitle>
+                      <Icon.FileOutlined
+                        style={{ fontSize: 16, marginRight: 8 }}
+                      />
+                      homepsdfsdfsdfsdfage
+                    </ListTitle>
+                    <ListDescription>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed
+                    </ListDescription>
+                  </ListItem>
+                  <ListItem>
+                    <ListTitle>
+                      <Icon.UnorderedListOutlined
+                        style={{ fontSize: 16, marginRight: 8 }}
+                      />
+                      homepsdfsdfsdfsdfage
+                    </ListTitle>
+                    <ListDescription>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed
+                    </ListDescription>
+                  </ListItem>
+                </div>
+              </CSSTransition>
+            </HoverWrapper>
+          </Card>
+        </ScrollAnimation>
         <Divider style={{ margin: '45px 0' }} />
         <style jsx>{`
           .example-enter {

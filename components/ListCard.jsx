@@ -48,9 +48,7 @@ const ListCard = ({ data }) => {
               span={7}
               offset={isEven(idx) && 6}
               order={isEven(idx) ? 1 : 2}
-              style={{
-                margin: isOpen && 0,
-              }}
+              isOpen={isOpen}
             >
               <Image
                 src="https://live.staticflickr.com/3716/11704689944_6ccf5eeabd_b.jpg"
@@ -58,7 +56,11 @@ const ListCard = ({ data }) => {
                 objectFit="cover"
               />
             </ImageWrapper>
-            <ContentWrapper span={11} order={isEven(idx) ? 2 : 1}>
+            <ContentWrapper
+              span={11}
+              order={isEven(idx) ? 2 : 1}
+              isOpen={isOpen}
+            >
               <div style={{ textAlign: isEven(idx) ? 'left' : 'right' }}>
                 <Title level={2} ellipsis={true}>
                   The standard Lorem Ipsum
@@ -93,97 +95,74 @@ const ListCard = ({ data }) => {
                 </Row>
               </div>
             </ContentWrapper>
-            <HoverWrapper
-              span={6}
-              style={{
-                background: `linear-gradient(135deg, ${gradients[idx]?.start} 0%, ${gradients[idx]?.end} 100%)`,
-                flex: `0 0 ${isOpen ? '25%' : '0'}`,
-              }}
-              order={isEven(idx) ? 3 : 0}
-            >
-              <CSSTransition
-                in={isOpen}
-                timeout={700}
-                classNames="example"
-                unmountOnExit
+            <DetailWrapper isEven={isEven(idx)} span={24} isOpen={isOpen}>
+              <DetailCol
+                isOpen={isOpen}
+                span={24}
+                startBackground={gradients[idx]?.start}
+                endBackground={gradients[idx]?.end}
+                order={isEven(idx) ? 3 : 0}
               >
-                <div style={{ position: 'absolute', padding: 20 }}>
-                  <ListItem>
-                    <ListTitle>
-                      <Icon.FileOutlined
-                        style={{ fontSize: 16, marginRight: 8 }}
-                      />
-                      homepsdfsdfsdfsdfage
-                    </ListTitle>
-                    <ListDescription>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sedLorem ipsum dolor sit amet, consectetur adipiscing
-                      elit, sedLorem ipsum dolor sit amet, consectetur
-                      adipiscing elit, sedLorem ipsum dolor sit amet,
-                      consectetur adipiscing elit, sed
-                    </ListDescription>
-                  </ListItem>
-                  <ListItem>
-                    <ListTitle>
-                      <Icon.UnorderedListOutlined
-                        style={{ fontSize: 16, marginRight: 8 }}
-                      />
-                      homepsdfsdfsdfsdfage
-                    </ListTitle>
-                    <ListDescription>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </ListDescription>
-                  </ListItem>
-                  <ListItem>
-                    <ListTitle>
-                      <Icon.FileOutlined
-                        style={{ fontSize: 16, marginRight: 8 }}
-                      />
-                      homepsdfsdfsdfsdfage
-                    </ListTitle>
-                    <ListDescription>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </ListDescription>
-                  </ListItem>
-                  <ListItem>
-                    <ListTitle>
-                      <Icon.UnorderedListOutlined
-                        style={{ fontSize: 16, marginRight: 8 }}
-                      />
-                      homepsdfsdfsdfsdfage
-                    </ListTitle>
-                    <ListDescription>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </ListDescription>
-                  </ListItem>
-                </div>
-              </CSSTransition>
-            </HoverWrapper>
+                <CSSTransition
+                  in={isOpen}
+                  timeout={700}
+                  classNames="example"
+                  unmountOnExit
+                >
+                  <div style={{ padding: 20 }}>
+                    <Space
+                      direction="vertical"
+                      split={
+                        <Divider style={{ margin: 0, padding: '0 25px' }} />
+                      }
+                    >
+                      {Array(10)
+                        .fill()
+                        .map((item, idx) => (
+                          <ListItem key={idx}>
+                            <ListTitle ellipsis={{ rows: 2 }}>
+                              <Icon.FileOutlined
+                                style={{ fontSize: 16, marginRight: 8 }}
+                              />
+                              homepsdfsdfsdfsdfage
+                            </ListTitle>
+
+                            <ListDescription ellipsis={{ rows: 2 }}>
+                              Lorem ipsum dolor sit amet, consectetur adipiscing
+                              elit, sedLorem ipsum dolor sit amet, consectetur
+                              adipiscing elit, sedLorem ipsum dolor sit amet,
+                              consectetur adipiscing elit, sedLorem ipsum dolor
+                              sit amet, consectetur adipiscing elit, sed
+                            </ListDescription>
+                          </ListItem>
+                        ))}
+                    </Space>
+                  </div>
+                </CSSTransition>
+              </DetailCol>
+            </DetailWrapper>
           </Card>
         </ScrollAnimation>
         <Divider style={{ margin: '45px 0' }} />
         <style jsx>{`
           .example-enter {
             opacity: 0;
-            transform: translateY(5%);
+            transform: translateY(1%);
           }
           .example-enter-active {
             opacity: 1;
             transform: translateY(0);
-            transition: opacity 300ms, transform 300ms;
-            transition-delay: 0.2s;
+            transition: opacity 400ms, transform 400ms;
+            transition-delay: 0.4s;
           }
           .example-exit {
             opacity: 1;
             transform: translateY(0);
+            transition: opacity 200ms, transform 200ms;
           }
           .example-exit-active {
             opacity: 0;
-            transform: translateY(5%);
-            transition-delay: 3s;
+            transform: translateY(-1%);
           }
         `}</style>
       </>
@@ -194,26 +173,51 @@ const ListCard = ({ data }) => {
 export default ListCard;
 
 const Card = styled(Row)`
-  &:hover > div {
-    box-shadow: rgba(0, 0, 0, 0.55) 0px 5px 15px;
-  }
+  position: relative;
 `;
 
 const ImageWrapper = styled(Col)`
   transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
   border: 1px solid #ddd;
+  min-height: 200px;
+  transition-delay: ${({ isOpen }) => (isOpen ? '0s' : '0.3s')};
+  opacity: ${({ isOpen }) => (isOpen ? '0' : '1')};
 `;
 
-const ContentWrapper = styled(ImageWrapper)`
+const ContentWrapper = styled(Col)`
+  transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
   padding: 20px 40px;
-  border-right: 0 !important;
-  border-left: 0 !important;
+  border: 1px solid #ddd;
+  opacity: ${({ isOpen }) => (isOpen ? '0' : '1')};
+  transition-delay: ${({ isOpen }) => (isOpen ? '0s' : '0.3s')};
+  height: auto;
 `;
 
-const HoverWrapper = styled(ImageWrapper)`
+const DetailWrapper = styled(Col)`
+  position: absolute;
+  height: 100%;
+  transition: all 0.4s;
+  transition-delay: 0.2s;
+  padding-right: ${({ isEven }) => (isEven ? '0%;' : '25%;')}
+  padding-left: ${({ isEven }) => (isEven ? '25%;' : '0%')}
+  width: ${({ isOpen }) => (isOpen ? '100%' : '0')};
+  flex: ${({ isOpen }) => (isOpen ? '0 0 100%' : '0 0 0%')};
+
+`;
+
+const DetailCol = styled(Col)`
   flex: 0 0 0;
-  position: relative;
+  transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  min-height: 200px;
+  width: ${({ isOpen }) => (isOpen ? '100%' : '0')};
+  background: linear-gradient(
+    135deg,
+    ${({ startBackground }) => startBackground} 0%,
+    ${({ endBackground }) => endBackground} 100%
+  );
   overflow: scroll;
+  height: 100%;
+  border: 0;
 `;
 const ListItem = styled.div`
   margin-bottom: 18px;
@@ -226,7 +230,6 @@ const ListTitle = styled(Paragraph)`
   word-break: break-all;
 `;
 const ListDescription = styled(Paragraph)`
-  color: #4b4b4b;
   margin-bottom: 8px !important;
   padding-left: 10px;
   font-size: 14px;

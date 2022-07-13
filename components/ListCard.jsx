@@ -34,7 +34,7 @@ const ListCard = ({ data }) => {
         <ScrollAnimation
           animateIn={isEven(idx) ? 'fadeInRight' : 'fadeInLeft'}
           offset={40}
-          duration={0.3}
+          duration={0.45}
           animateOnce={true}
         >
           <Card
@@ -177,26 +177,26 @@ const Card = styled(Row)`
 `;
 
 const ImageWrapper = styled(Col)`
-  transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: all 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   border: 1px solid #ddd;
   min-height: 200px;
-  transition-delay: ${({ isOpen }) => (isOpen ? '0s' : '0.3s')};
+  transition-delay: ${({ isOpen }) => (isOpen ? '0s' : '0.4s')};
   opacity: ${({ isOpen }) => (isOpen ? '0' : '1')};
 `;
 
 const ContentWrapper = styled(Col)`
-  transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: all 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   padding: 20px 40px;
   border: 1px solid #ddd;
   opacity: ${({ isOpen }) => (isOpen ? '0' : '1')};
-  transition-delay: ${({ isOpen }) => (isOpen ? '0s' : '0.3s')};
+  transition-delay: ${({ isOpen }) => (isOpen ? '0s' : '0.4s')};
   height: auto;
 `;
 
 const DetailWrapper = styled(Col)`
   position: absolute;
   height: 100%;
-  transition: all 0.4s;
+  transition: all 0.5s;
   transition-delay: 0.2s;
   padding-right: ${({ isEven }) => (isEven ? '0%;' : '25%;')}
   padding-left: ${({ isEven }) => (isEven ? '25%;' : '0%')}
@@ -207,7 +207,7 @@ const DetailWrapper = styled(Col)`
 
 const DetailCol = styled(Col)`
   flex: 0 0 0;
-  transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: all 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   min-height: 200px;
   width: ${({ isOpen }) => (isOpen ? '100%' : '0')};
   background: linear-gradient(

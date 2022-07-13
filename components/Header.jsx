@@ -34,10 +34,9 @@ export default function HeaderLayout() {
   const springApi = useSpringRef();
   const { size, ...rest } = useSpring({
     ref: springApi,
-    config: config.stiff,
+    config: { ...config.stiff, duration: 300 },
     from: {
       size: '0%',
-      // border: 'none',
       height: '1px',
       background: '#ffffff00',
       padding: 0,
@@ -47,12 +46,9 @@ export default function HeaderLayout() {
       size: open ? '100%' : '0%',
       background: open ? '#b7c8fa73' : '#ffffff00',
       height: '100%',
-      // border: 1,
       padding: open ? 15 : 0,
       paddingTop: open ? 30 : 0,
       overflow: open ? 'scroll' : 'visible',
-      // borderColor: '#ccc',
-      // borderStyle: open ? 'solid' : 'none',
     },
   });
 
@@ -77,7 +73,7 @@ export default function HeaderLayout() {
   // This will orchestrate the two animations above, comment the last arg and it creates a sequence
   useChain(open ? [springApi, transApi] : [transApi, springApi], [
     0,
-    open ? 0.1 : 0.6,
+    open ? 0.3 : 0.6,
   ]);
 
   const handleClickItem = (route) => {
@@ -87,7 +83,12 @@ export default function HeaderLayout() {
 
   return (
     <>
-      <div className={styles.wrapper}>
+      <animated.div
+        className={styles.wrapper}
+        style={{
+          height: size,
+        }}
+      >
         <animated.div style={{ ...closeBtnStyle, zIndex: 1 }}>
           <BtnContainer visible={open} style={{ paddingRight: 30 }}>
             <CloseButton>
@@ -114,12 +115,6 @@ export default function HeaderLayout() {
               onClick={() => !open && set((open) => !open)}
               style={{ fontSize: 30, display: open && 'none' }}
             />
-            {/* <span
-              onClick={() => !open && set((open) => !open)}
-              style={{ color: 'red' }}
-            >
-              Icon
-            </span> */}
           </animated.div>
 
           {transition((style, item) => {
@@ -149,7 +144,7 @@ export default function HeaderLayout() {
             );
           })}
         </animated.div>
-      </div>
+      </animated.div>
     </>
   );
 }

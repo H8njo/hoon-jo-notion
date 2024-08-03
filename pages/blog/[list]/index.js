@@ -12,12 +12,12 @@ export default function List() {
     .map((_, idx) => idx);
   return (
     <>
-      {/* <div>
+      <div>
         <Title>Projects</Title>
         <Paragraph style={{ fontSize: 20 }}>
           프로젝트에 대한 페이지 입니다{' '}
         </Paragraph>
-      </div> */}
+      </div>
       <ListCard data={data} />
     </>
   );

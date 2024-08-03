@@ -21,12 +21,27 @@ const ListCard = ({ data }) => {
   }, [data]);
 
   const isEven = (num) => num % 2 === 0;
-  const handleClick = (idx) => {
+
+  const showDetail = (idx) => {
     const hoverControl = inProp.map((item) => {
-      return { ...item, isIn: item.idx === idx ? !item.isIn : item.isIn };
+      return {
+        ...item,
+        isIn: item.idx === idx ? !item.isIn : item.isIn,
+      };
+    });
+
+    setInProp(hoverControl);
+  };
+  const closeDetail = (idx) => {
+    const hoverControl = inProp.map((item) => {
+      return {
+        ...item,
+        isIn: item.idx === idx ? !item.isIn : item.isIn,
+      };
     });
     setInProp(hoverControl);
   };
+
   return data?.map((item, idx) => {
     const isOpen = inProp[idx]?.isIn;
     return (
@@ -41,7 +56,7 @@ const ListCard = ({ data }) => {
             isEven={isEven(idx)}
             wrap={false}
             onClick={() => {
-              handleClick(idx);
+              isOpen || showDetail(idx);
             }}
           >
             <ImageWrapper
@@ -105,8 +120,17 @@ const ListCard = ({ data }) => {
               >
                 <CSSTransition
                   in={isOpen}
+                  timeout={7000}
+                  classNames="close-btn"
+                >
+                  <div className="close" onClick={() => closeDetail(idx)}>
+                    <Icon.CloseOutlined />
+                  </div>
+                </CSSTransition>
+                <CSSTransition
+                  in={isOpen}
                   timeout={700}
-                  classNames="example"
+                  classNames="detail"
                   unmountOnExit
                 >
                   <div style={{ padding: 20 }}>
@@ -145,22 +169,49 @@ const ListCard = ({ data }) => {
         </ScrollAnimation>
         <Divider style={{ margin: '45px 0' }} />
         <style jsx>{`
-          .example-enter {
+          .detail-enter {
             opacity: 0;
             transform: translateY(1%);
           }
-          .example-enter-active {
+          .detail-enter-active {
             opacity: 1;
             transform: translateY(0);
             transition: opacity 400ms, transform 400ms;
             transition-delay: 0.4s;
           }
-          .example-exit {
+          .detail-exit {
             opacity: 1;
             transform: translateY(0);
             transition: opacity 200ms, transform 200ms;
           }
-          .example-exit-active {
+          .detail-exit-active {
+            opacity: 0;
+            transform: translateY(-1%);
+          }
+          .close {
+            position: absolute;
+            font-size: 22px;
+            right: 13px;
+            top: 4px;
+            cursor: pointer;
+            z-index: 2;
+          }
+          .close-btn-enter {
+            opacity: 0;
+            transform: translateY(1%);
+          }
+          .close-btn-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 400ms, transform 400ms;
+            transition-delay: 0.8s;
+          }
+          .close-btn-exit {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 200ms, transform 200ms;
+          }
+          .close-btn-exit-active {
             opacity: 0;
             transform: translateY(-1%);
           }
@@ -210,6 +261,7 @@ const DetailCol = styled(Col)`
   transition: all 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   min-height: 200px;
   width: ${({ isOpen }) => (isOpen ? '100%' : '0')};
+  position: relative;
   background: linear-gradient(
     135deg,
     ${({ startBackground }) => startBackground} 0%,
@@ -219,6 +271,7 @@ const DetailCol = styled(Col)`
   height: 100%;
   border: 0;
 `;
+
 const ListItem = styled.div`
   margin-bottom: 18px;
 `;

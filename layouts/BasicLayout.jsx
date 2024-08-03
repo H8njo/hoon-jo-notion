@@ -4,7 +4,7 @@ const BasicLayout = ({ children }) => {
   return (
     <>
       <RouteAnimation />
-      <div style={{ padding: '0 200px' }}>{children}</div>
+      <div style={{ padding: '100px 200px' }}>{children}</div>
     </>
   );
 };
